@@ -19,7 +19,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="hBR-jt-JjJ">
-                        <barButtonItem key="leftBarButtonItem" title="Fix" id="FYC-Py-PDH">
+                        <barButtonItem key="leftBarButtonItem" title="Select" id="FYC-Py-PDH">
                             <connections>
                                 <action selector="fixSelection" destination="BYZ-38-t0r" id="dbx-rv-7d7"/>
                             </connections>
