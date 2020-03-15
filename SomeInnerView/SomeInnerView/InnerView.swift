@@ -191,14 +191,44 @@ public class InnerView: UIView {
 		}
 	}
 	
+	private var initialCenter = CGPoint()
 	@objc
-	private func onSelectionDrag(_ sender: UIPanGestureRecognizer) {
-		print("!!!! PAN")
+	private func onSelectionDrag(_ gestureRecognizer: UIPanGestureRecognizer) {
+		guard gestureRecognizer.view != nil else {return}
+		let piece = gestureRecognizer.view!
+		let translation = gestureRecognizer.translation(in: piece.superview)
+		if gestureRecognizer.state == .began {
+			// Save the view's original position.
+			self.initialCenter = piece.center
+		}
+		// Update the position for the .began, .changed, and .ended states
+		if gestureRecognizer.state != .cancelled {
+			// Add the X and Y translation to the view's original position.
+			let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y + translation.y)
+			piece.center = newCenter
+			recalculateByNewFrame()
+			internalCalculations()
+			
+		}
+		else {
+			// On cancellation, return the piece to its original location.
+			piece.center = initialCenter
+			recalculateByNewFrame()
+			internalCalculations()
+		}
+		
 	}
 	
 	@objc
-	private func onSelectionScaling(_ sender: UIPinchGestureRecognizer) {
-		print("!!!! PINCH")
+	private func onSelectionScaling(_ gestureRecognizer: UIPinchGestureRecognizer) {
+		guard let view = gestureRecognizer.view else { return }
+		if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+			var newSize = CGSize.zero
+			newSize.width  = view.frame.size.width  * gestureRecognizer.scale
+			newSize.height = view.frame.size.height * gestureRecognizer.scale
+			changeSecondaryViewSize(to: newSize)
+			gestureRecognizer.scale = 1.0
+		}
 	}
 
 	fileprivate func centerScrollViewContent() {
@@ -207,10 +237,21 @@ public class InnerView: UIView {
         scrollView.contentInset = UIEdgeInsets(top: CGFloat(fmaxf(0, Float(topMargin))), left: CGFloat(fmaxf(0, Float(leftMargin))), bottom: 0, right: 0)
     }
 
-	
-	//size in percents
 	public func changeSecondaryViewSize(to size: CGSize) {
-		//@TODO:
+		let currentSize = rectangleView.frame.size
+		let dWidth  = size.width  - currentSize.width
+		let dHeight = size.height - currentSize.height
+		
+		var currentOrigin = rectangleView.frame.origin
+		currentOrigin.x -= dWidth  / 2
+		currentOrigin.y -= dHeight / 2
+		changeSelectionFrame(to: CGRect(x: currentOrigin.x, y: currentOrigin.y, width: size.width, height: size.height))
+	}
+	
+	public func changeSelectionFrame(to frame: CGRect) {
+		rectangleView.frame = frame
+		recalculateByNewFrame()
+		internalCalculations()
 	}
 	
 	private func update() {
@@ -246,41 +287,46 @@ public class InnerView: UIView {
 		updateSecondary()
 	}
 	
-	private func updateSecondary() {
-		func internalCalculations() {
-			guard let mainImage = mainImage,
-				let secondaryImage = secondaryImage else { return }
-			
-			let selectionWidth  = ((right  - x) * mainImage.size.width) * scrollView.zoomScale
-			let selectionHeight = ((bottom - y) * mainImage.size.height) * scrollView.zoomScale
-			let xPos = (mainImage.size.width * x) * scrollView.zoomScale - scrollView.contentOffset.x
-			let yPos = (mainImage.size.height * y) * scrollView.zoomScale - scrollView.contentOffset.y
-			
-			selectionView.frame = CGRect(x: xPos, y: yPos, width: selectionWidth, height: selectionHeight)
-			
-			
-			secondaryView.frame = CGRect(x: -xPos - scrollView.contentOffset.x, y: -yPos  - scrollView.contentOffset.y, width: secondaryImage.size.width * scrollView.zoomScale, height: secondaryImage.size.height * scrollView.zoomScale)
-		}
-		
+	private func internalCalculations() {
 		guard let mainImage = mainImage,
 			let secondaryImage = secondaryImage else { return }
+		
+		let selectionWidth  = ((right  - x) * mainImage.size.width) * scrollView.zoomScale
+		let selectionHeight = ((bottom - y) * mainImage.size.height) * scrollView.zoomScale
+		let xPos = (mainImage.size.width * x) * scrollView.zoomScale - scrollView.contentOffset.x
+		let yPos = (mainImage.size.height * y) * scrollView.zoomScale - scrollView.contentOffset.y
+		
+		selectionView.frame = CGRect(x: xPos, y: yPos, width: selectionWidth, height: selectionHeight)
+		
+		
+		secondaryView.frame = CGRect(x: -xPos - scrollView.contentOffset.x, y: -yPos  - scrollView.contentOffset.y, width: secondaryImage.size.width * scrollView.zoomScale, height: secondaryImage.size.height * scrollView.zoomScale)
+	}
+	
+	private func recalculateByNewFrame() {
+		guard let mainImage = mainImage else { return }
+	
+		let currentXInFrame = selectionView.frame.origin.x
+		let currentYInFrame = selectionView.frame.origin.y
+		let currentWidthInFrame = selectionView.frame.size.width
+		let currentHeightInFrame = selectionView.frame.size.height
+		
+		_x = (currentXInFrame + scrollView.contentOffset.x) / (mainImage.size.width * scrollView.zoomScale)
+		_y = (currentYInFrame + scrollView.contentOffset.y) / (mainImage.size.height * scrollView.zoomScale)
+		
+		_right  = currentWidthInFrame / (mainImage.size.width * scrollView.zoomScale) + x
+		_bottom = currentHeightInFrame / (mainImage.size.height * scrollView.zoomScale) + y
+	}
+	
+	private func updateSecondary() {
+		
+		guard let secondaryImage = secondaryImage else { return }
 		
 		secondaryView.image = secondaryImage
 		
 		if isSelectionFixed || !isSelectionInitialized {
 			internalCalculations()
 		} else if !isSelectionFixed && isSelectionInitialized {
-			let currentXInFrame = selectionView.frame.origin.x
-			let currentYInFrame = selectionView.frame.origin.y
-			let currentWidthInFrame = selectionView.frame.size.width
-			let currentHeightInFrame = selectionView.frame.size.height
-			
-			_x = (currentXInFrame + scrollView.contentOffset.x) / (mainImage.size.width * scrollView.zoomScale)
-			_y = (currentYInFrame + scrollView.contentOffset.y) / (mainImage.size.height * scrollView.zoomScale)
-			
-			_right  = currentWidthInFrame / (mainImage.size.width * scrollView.zoomScale) + x
-			_bottom = currentHeightInFrame / (mainImage.size.height * scrollView.zoomScale) + y
-			
+			recalculateByNewFrame()
 			internalCalculations()
 		}
 	}
