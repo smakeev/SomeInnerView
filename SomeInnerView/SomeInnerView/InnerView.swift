@@ -68,6 +68,17 @@ public class InnerView: UIView {
 	private var _right:  CGFloat = 0
 	private var _bottom: CGFloat = 0
 
+	public var zoom: CGFloat {
+		get {
+			scrollView.zoomScale
+		}
+		
+		set {
+			scrollView.zoomScale = newValue
+			update()
+		}
+	}
+
 	public var x:      CGFloat {
 		set {
 			_x = newValue
