@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B6762197241D4B6400A3C79C /* SomeInnerView.h in Headers */ = {isa = PBXBuildFile; fileRef = B6762195241D4B6400A3C79C /* SomeInnerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B67621DE241D4C1A00A3C79C /* InnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67621DD241D4C1A00A3C79C /* InnerView.swift */; };
+		B6CE2EB0241DAB3C00C6DBAA /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CE2EAF241DAB3C00C6DBAA /* SelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +17,7 @@
 		B6762195241D4B6400A3C79C /* SomeInnerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SomeInnerView.h; sourceTree = "<group>"; };
 		B6762196241D4B6400A3C79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B67621DD241D4C1A00A3C79C /* InnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerView.swift; sourceTree = "<group>"; };
+		B6CE2EAF241DAB3C00C6DBAA /* SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				B6762195241D4B6400A3C79C /* SomeInnerView.h */,
+				B6CE2EAF241DAB3C00C6DBAA /* SelectionView.swift */,
 				B6762196241D4B6400A3C79C /* Info.plist */,
 				B67621DD241D4C1A00A3C79C /* InnerView.swift */,
 			);
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B67621DE241D4C1A00A3C79C /* InnerView.swift in Sources */,
+				B6CE2EB0241DAB3C00C6DBAA /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

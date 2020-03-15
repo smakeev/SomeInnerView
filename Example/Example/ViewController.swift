@@ -11,7 +11,9 @@ import UIKit
 class ViewController: UIViewController {
 	var innerView: InnerView!
 
-
+	@IBOutlet weak var fixItem: UIBarButtonItem!
+	@IBOutlet weak var editItem: UIBarButtonItem!
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		innerView = InnerView()
@@ -57,6 +59,23 @@ class ViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		innerView.isSelectionFixed = false
+	}
+	
+	@IBAction func doEdit() {
+		editItem.title = innerView.selectionView.isUserInteractionEnabled ? "Edit" : "Done"
+		innerView.selectionView.isUserInteractionEnabled.toggle()
+		
+		if innerView.selectionView.isUserInteractionEnabled {
+			innerView.selectionView.layer.borderColor = UIColor.white.cgColor
+			innerView.selectionView.layer.borderWidth = 2.0
+		} else {
+			innerView.selectionView.layer.borderWidth = 0
+		}
+	}
+	
+	@IBAction func fixSelection() {
+		fixItem.title = innerView.isSelectionFixed ? "fix" : "unfix"
+		innerView.isSelectionFixed.toggle()
 	}
 
 }

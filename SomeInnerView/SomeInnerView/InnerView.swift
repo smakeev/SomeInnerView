@@ -28,7 +28,7 @@ public class InnerView: UIView {
 		}
 	}
 	
-	public var selectionView: UIView {
+	public var selectionView: UIView! {
 		get {
 			rectangleView
 		}
@@ -45,7 +45,7 @@ public class InnerView: UIView {
 		}
 	}
 	
-	public private(set) var rectangleView: UIView!
+	private var rectangleView: SelectionView!
 	public private(set) var position: CGRect = .zero // all values form 0 upto 1
 
 	fileprivate var mainView:  UIImageView!
@@ -110,7 +110,10 @@ public class InnerView: UIView {
     private var leftMargin: CGFloat = 0
     private var topMargin:  CGFloat = 0
     
-    fileprivate var doubleTapRecognizer:     UITapGestureRecognizer!
+    fileprivate var doubleTapRecognizer:        UITapGestureRecognizer!
+    fileprivate var dragRecognizerInSelection:  UIPanGestureRecognizer!
+    fileprivate var scaleRecognizerInSelection: UIPinchGestureRecognizer!
+    public var allowStandardActions: Bool = true
 	
 	override public init(frame: CGRect) {
 		super.init(frame: frame)
@@ -138,7 +141,7 @@ public class InnerView: UIView {
 		scrollView    = UIScrollView()
 		mainView      = UIImageView()
 		secondaryView = UIImageView()
-		rectangleView = UIView()
+		rectangleView = SelectionView()
 		rectangleView.isHidden = true
 		rectangleView.isUserInteractionEnabled = false
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -171,6 +174,12 @@ public class InnerView: UIView {
 		doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onDoubleTappingHandler(_:)))
 		doubleTapRecognizer.numberOfTapsRequired = 2
 		mainView.addGestureRecognizer(doubleTapRecognizer)
+		
+		dragRecognizerInSelection = UIPanGestureRecognizer(target: self, action: #selector(onSelectionDrag(_:)))
+		scaleRecognizerInSelection = UIPinchGestureRecognizer(target: self, action: #selector(onSelectionScaling(_:)))
+		
+		rectangleView.addGestureRecognizer(dragRecognizerInSelection)
+		rectangleView.addGestureRecognizer(scaleRecognizerInSelection)
 	}
 
 	@objc
@@ -180,7 +189,16 @@ public class InnerView: UIView {
 		} else {
 			scrollView.setZoomScale(minScale, animated: true)
 		}
-		
+	}
+	
+	@objc
+	private func onSelectionDrag(_ sender: UIPanGestureRecognizer) {
+		print("!!!! PAN")
+	}
+	
+	@objc
+	private func onSelectionScaling(_ sender: UIPinchGestureRecognizer) {
+		print("!!!! PINCH")
 	}
 
 	fileprivate func centerScrollViewContent() {
@@ -192,7 +210,7 @@ public class InnerView: UIView {
 	
 	//size in percents
 	public func changeSecondaryViewSize(to size: CGSize) {
-		
+		//@TODO:
 	}
 	
 	private func update() {

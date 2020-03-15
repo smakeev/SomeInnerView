@@ -13,6 +13,7 @@
 		B67621D3241D4BEB00A3C79C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B67621D2241D4BEB00A3C79C /* Assets.xcassets */; };
 		B67621D6241D4BEB00A3C79C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B67621D4241D4BEB00A3C79C /* LaunchScreen.storyboard */; };
 		B67621E1241D4C6C00A3C79C /* InnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67621E0241D4C6C00A3C79C /* InnerView.swift */; };
+		B6CE2EB2241DAB6E00C6DBAA /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CE2EB1241DAB6E00C6DBAA /* SelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		B67621D5241D4BEB00A3C79C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B67621D7241D4BEB00A3C79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B67621E0241D4C6C00A3C79C /* InnerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InnerView.swift; path = ../../SomeInnerView/SomeInnerView/InnerView.swift; sourceTree = "<group>"; };
+		B6CE2EB1241DAB6E00C6DBAA /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectionView.swift; path = ../../SomeInnerView/SomeInnerView/SelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 		B67621DF241D4C2900A3C79C /* Inner */ = {
 			isa = PBXGroup;
 			children = (
+				B6CE2EB1241DAB6E00C6DBAA /* SelectionView.swift */,
 				B67621E0241D4C6C00A3C79C /* InnerView.swift */,
 			);
 			name = Inner;
@@ -149,6 +152,7 @@
 				B67621CE241D4BEA00A3C79C /* ViewController.swift in Sources */,
 				B67621E1241D4C6C00A3C79C /* InnerView.swift in Sources */,
 				B67621CA241D4BEA00A3C79C /* AppDelegate.swift in Sources */,
+				B6CE2EB2241DAB6E00C6DBAA /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
