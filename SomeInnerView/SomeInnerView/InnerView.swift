@@ -11,6 +11,8 @@ import UIKit
 
 public class InnerView: UIView {
 	
+// MARK: - Public variables
+
 	public var mainImage:      UIImage? {
 		didSet {
 			update()
@@ -44,12 +46,7 @@ public class InnerView: UIView {
 			}
 		}
 	}
-	
-	private var rectangleView: SelectionView!
 	public private(set) var position: CGRect = .zero // all values form 0 upto 1
-
-	fileprivate var mainView:  UIImageView!
-	private var secondaryView: UIImageView!
 
 	public var maximumAllowedExtraZoom: CGFloat = 4 //does not change zoom on change
 	public var extraZoom: Bool = true {
@@ -62,11 +59,6 @@ public class InnerView: UIView {
 			}
 		}
 	}
-
-	private var _x:      CGFloat = 0
-	private var _y:      CGFloat = 0
-	private var _right:  CGFloat = 0
-	private var _bottom: CGFloat = 0
 
 	public var zoom: CGFloat {
 		get {
@@ -112,19 +104,35 @@ public class InnerView: UIView {
 		get { _bottom }
 	}
 	
+	public var allowStandardActions: Bool = true
+	
+// MARK: - Internal variables
+
+	var minScale:  CGFloat = 0
+	var maxScale:  CGFloat = 0
+
 	private var scrollView: UIScrollView!
 	private var initialized: Bool = false
+
+	fileprivate var mainView:  UIImageView!
+	private var secondaryView: UIImageView!
+	private var rectangleView: SelectionView!
+
+	private var _x:      CGFloat = 0
+	private var _y:      CGFloat = 0
+	private var _right:  CGFloat = 0
+	private var _bottom: CGFloat = 0
+
+	private var leftMargin: CGFloat = 0
+	private var topMargin:  CGFloat = 0
 	
-    var minScale:  CGFloat = 0
-    var maxScale:  CGFloat = 0
-    
-    private var leftMargin: CGFloat = 0
-    private var topMargin:  CGFloat = 0
-    
-    fileprivate var doubleTapRecognizer:        UITapGestureRecognizer!
-    fileprivate var dragRecognizerInSelection:  UIPanGestureRecognizer!
-    fileprivate var scaleRecognizerInSelection: UIPinchGestureRecognizer!
-    public var allowStandardActions: Bool = true
+	fileprivate var doubleTapRecognizer:        UITapGestureRecognizer!
+	fileprivate var dragRecognizerInSelection:  UIPanGestureRecognizer!
+	fileprivate var scaleRecognizerInSelection: UIPinchGestureRecognizer!
+	
+	private var initialCenter = CGPoint()
+	
+// MARK: - Public Actions
 	
 	override public init(frame: CGRect) {
 		super.init(frame: frame)
@@ -141,12 +149,32 @@ public class InnerView: UIView {
 		internalInit()
 	}
 	
+	
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		if !scrollView.isZooming {
 			update()
 		}
 	}
+	
+	public func changeSecondaryViewSize(to size: CGSize) {
+		let currentSize = rectangleView.frame.size
+		let dWidth  = size.width  - currentSize.width
+		let dHeight = size.height - currentSize.height
+		
+		var currentOrigin = rectangleView.frame.origin
+		currentOrigin.x -= dWidth  / 2
+		currentOrigin.y -= dHeight / 2
+		changeSelectionFrame(to: CGRect(x: currentOrigin.x, y: currentOrigin.y, width: size.width, height: size.height))
+	}
+	
+	public func changeSelectionFrame(to frame: CGRect) {
+		rectangleView.frame = frame
+		recalculateByNewFrame()
+		internalCalculations()
+	}
+	
+	// MARK: - Private actions
 	
 	private func internalInit() {
 		scrollView    = UIScrollView()
@@ -202,7 +230,6 @@ public class InnerView: UIView {
 		}
 	}
 	
-	private var initialCenter = CGPoint()
 	@objc
 	private func onSelectionDrag(_ gestureRecognizer: UIPanGestureRecognizer) {
 		guard gestureRecognizer.view != nil else {return}
@@ -247,23 +274,6 @@ public class InnerView: UIView {
         topMargin   = CGFloat(scrollView.frame.size.height - mainView.frame.size.height) * 0.5
         scrollView.contentInset = UIEdgeInsets(top: CGFloat(fmaxf(0, Float(topMargin))), left: CGFloat(fmaxf(0, Float(leftMargin))), bottom: 0, right: 0)
     }
-
-	public func changeSecondaryViewSize(to size: CGSize) {
-		let currentSize = rectangleView.frame.size
-		let dWidth  = size.width  - currentSize.width
-		let dHeight = size.height - currentSize.height
-		
-		var currentOrigin = rectangleView.frame.origin
-		currentOrigin.x -= dWidth  / 2
-		currentOrigin.y -= dHeight / 2
-		changeSelectionFrame(to: CGRect(x: currentOrigin.x, y: currentOrigin.y, width: size.width, height: size.height))
-	}
-	
-	public func changeSelectionFrame(to frame: CGRect) {
-		rectangleView.frame = frame
-		recalculateByNewFrame()
-		internalCalculations()
-	}
 	
 	private func update() {
 		guard let validImage = mainImage else { return }
@@ -342,6 +352,9 @@ public class InnerView: UIView {
 		}
 	}
 }
+
+	
+// MARK: - Extensions
 
 extension InnerView: UIScrollViewDelegate {
 	public func viewForZooming(in scrollView: UIScrollView) -> UIView? {

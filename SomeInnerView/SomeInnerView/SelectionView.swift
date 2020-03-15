@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 class SelectionView: UIView {
-
-
 	override  func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		if self.isUserInteractionEnabled {
 			super.touchesBegan(touches, with: event)
@@ -19,6 +17,5 @@ class SelectionView: UIView {
 			self.next?.touchesBegan(touches, with: event)
 		}
 	}
-
 }
 
