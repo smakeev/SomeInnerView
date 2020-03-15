@@ -74,7 +74,7 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func fixSelection() {
-		fixItem.title = innerView.isSelectionFixed ? "fix" : "unfix"
+		fixItem.title = innerView.isSelectionFixed ? "select" : "unselect"
 		innerView.isSelectionFixed.toggle()
 	}
 
