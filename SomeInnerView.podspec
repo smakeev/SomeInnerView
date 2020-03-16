@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'SomeInnerView'
-  s.version = '1.0.0'
+  s.version = '1.0.1'
   s.license = 'MIT'
   s.summary = 'Make selection on image'
   s.homepage = 'https://github.com/smakeev/SomeInnerView'
@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.1']
 
-  s.source_files = 'Source/*.swift'
+  s.source_files = 'SomeInnerView/SomeInnerView/*.swift'
 end
