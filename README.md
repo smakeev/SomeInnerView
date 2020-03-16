@@ -64,3 +64,12 @@ to fix the selection view on part of an image
 ```swift
 innerView.isSelectionFixed = true
 ```
+
+# How to use:
+```
+pod "SomeInnerView"	
+```
+
+```swift
+import SomeInnerView
+```
