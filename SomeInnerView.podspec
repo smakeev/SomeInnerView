@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'SomeInnerView'
-  s.version = '1.0.2'
+  s.version = '1.0.3'
   s.license = 'MIT'
   s.summary = 'Make selection on image'
   s.homepage = 'https://github.com/smakeev/SomeInnerView'

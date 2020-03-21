@@ -126,9 +126,9 @@ public class InnerView: UIView {
 	private var leftMargin: CGFloat = 0
 	private var topMargin:  CGFloat = 0
 	
-	fileprivate var doubleTapRecognizer:        UITapGestureRecognizer!
-	fileprivate var dragRecognizerInSelection:  UIPanGestureRecognizer!
-	fileprivate var scaleRecognizerInSelection: UIPinchGestureRecognizer!
+	public fileprivate(set) var doubleTapRecognizer:        UITapGestureRecognizer!
+	public fileprivate(set) var dragRecognizerInSelection:  UIPanGestureRecognizer!
+	public fileprivate(set) var scaleRecognizerInSelection: UIPinchGestureRecognizer!
 	
 	private var initialCenter = CGPoint()
 	
